@@ -1,0 +1,25 @@
+html{
+  padding: 0px;
+  margin: 0px;
+}
+
+table{
+width: 100%;
+}
+tr{
+  margin: 1px;
+  border: 1px;
+  border-style: solid;
+  padding: 2px;
+  background-color: coral;
+}
+td{
+  padding: 2px;
+}
+.td1{
+  width: 30%;
+}
+
+.td3{
+  width: 10%;
+}
