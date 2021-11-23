@@ -1,6 +1,9 @@
-html{
+body {
+	font-family: monospace;
+  background-color: darkred;
   padding: 0px;
   margin: 0px;
+  font-size: 1rem;
 }
 
 table{
@@ -12,6 +15,10 @@ tr{
   border-style: solid;
   padding: 2px;
   background-color: coral;
+}
+tr.today{
+	background: lime;
+	
 }
 td{
   padding: 2px;
