@@ -5,7 +5,7 @@
 //--------------
 const apiUriSpdiary = "https://sj-sam.de/api/spdiary/spdiary.php";
 const apiUriHorse = "https://sj-sam.de/api/spdiary/horse.php";
-
+const selectedHorse = document.getElementById("selectedHorse");
 const content = document.getElementById("content");
 const tblCalendar = document.getElementById("calendar");
 const navigation = document.getElementById("navigation");
@@ -16,49 +16,52 @@ var unixTime = d.getTime();
 var f = 24 * 60 * 60 * 1000;
 var unixToday = Math.floor(unixTime / f);
 let allEntries = [];
-let allHorses = [];
+let myHorses = [];
 //let myHorseId = ;
 let selectedHorseId = 0;
 
-//---------------------------------
+//----------- fetches all entries in table: "spdiary" ----------
 async function getSpdiary(){
   const response = await fetch(apiUriSpdiary);
   const data = await response.json();
   allEntries = data;
   return data;
 }
+//---------------------------------------------------------------
 
+//--------stores a horse in local storage-----------------------
 async function saveHorseLocally(){
-  let id =12;
+  let id =13;
   let name = "Sammy";
-  var storedHorses = JSON.parse(localStorage.getItem("myHorses"));
-  console.log("StoredHorses", storedHorses);
-  if(storedHorses === null){
-    storedHorses = [];
-  }
+  
+  
   let newHorse = new Object;
   newHorse.id=id;
   newHorse.name = name;
-  storedHorses.push(newHorse);
-  localStorage.setItem("myHorses", JSON.stringify(storedHorses));
+  myHorses.push(newHorse);
+  localStorage.setItem("myHorses", JSON.stringify(myHorses));
 
 }
+//-------------------------------------------------------------------
+
 
 async function createNewHorse(){
   let name = prompt("Name");
   let uri = `${apiUriHorse}?action=insert&name=${name}`;
   const response = await fetch(uri);
+  console.log("response", response);
   if(response.statusText == "OK"){
+    let id = await response.text();
+    let newHorse = new Object;
+    newHorse.id=id;
+    newHorse.name = name;
+    myHorses.push(newHorse);
+    localStorage.setItem("myHorses", JSON.stringify(myHorses));
     init();
   }
 
 }
-async function getHorse(){
-  const response = await fetch(apiUriHorse);
-  const data = await response.json();
-  allHorses = data;
-    return data;
-}
+
 
 async function updateSpdiary(id){
   let oldtext = allEntries.filter(entry => entry.id == id)[0].text;
@@ -79,6 +82,7 @@ async function insertSpdiary(day,horse_id){
   }
 }
 
+// ----------------- creates output--------------------------------
 function drawSpdiary(horse_id){
   console.log(selectedHorseId);
   tblCalendar.innerHTML = "";
@@ -112,25 +116,31 @@ function drawSpdiary(horse_id){
   }
     
 }
+//----------------------------------------------------------------------------------------
 
 
+//------------selects a horse to display---------------------------
 function selectHorseId(horseId){
   selectedHorseId = horseId;
+  selectedHorse.innerHTML = myHorses.filter(entry => entry.id == horseId)[0].name;
   drawSpdiary(selectedHorseId);
 }
+//---------------------------------------------------------------
+
 function drawNavigation(){
   navigation.innerHTML = "";
-  allHorses.forEach(element => {
-    let button = `<button horse_id ="${element.id}" onClick="selectHorseId(${element.id})">${element.name}</button>`;
+  console.log("myHorses",myHorses);
+  myHorses.forEach(element => {
+    let button = `<button  onClick="selectHorseId(${element.id})">${element.name}</button>`;
     navigation.innerHTML += button;
   })
 }
 
 function init(){
-  getHorse()
-  .then(function(){
+  if(localStorage.getItem("myHorses") !== null){
+    myHorses = JSON.parse(localStorage.getItem("myHorses"));
     drawNavigation();
-  })
+  } 
   getSpdiary()
   .then(function(){
     if(selectedHorseId != 0){
