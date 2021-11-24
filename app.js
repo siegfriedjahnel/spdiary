@@ -7,7 +7,7 @@ const apiUriSpdiary = "https://sj-sam.de/api/spdiary/spdiary.php";
 const apiUriHorse = "https://sj-sam.de/api/spdiary/horse.php";
 const selectedHorse = document.getElementById("selectedHorse");
 const content = document.getElementById("content");
-const tblCalendar = document.getElementById("calendar");
+const tblOutput = document.getElementById("tblOutput");
 const navigation = document.getElementById("navigation");
 const options = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric' };
 //---------------------------------
@@ -83,9 +83,34 @@ async function insertSpdiary(day,horse_id){
 }
 
 // ----------------- creates output--------------------------------
+function drawHorses(){
+  tblOutput.innerHTML = "";
+
+  const th = document.createElement("tr");
+  th.innerHTML = `<th>PferdeNr</th><th>PferdeName</th><th> </th>`;
+  tblOutput.appendChild(th);
+  myHorses.forEach(element => {
+  const tr = document.createElement("tr");
+  const td1 = document.createElement("td");
+  const td2 = document.createElement("td");
+  const td3 = document.createElement("td");
+  td1.setAttribute("class","td1");
+  td3.setAttribute("class","td3");
+    td1.innerHTML = element.id;
+    td2.innerHTML = element.name;
+    td3.innerHTML = `<button onClick = "updateHorse(${element.id})">&#x1F589;</button>`;
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    tr.appendChild(td3);
+    tblOutput.appendChild(tr);
+    
+  })
+}
+
+//-----------------------------------------------------------------
 function drawSpdiary(horse_id){
   console.log(selectedHorseId);
-  tblCalendar.innerHTML = "";
+  tblOutput.innerHTML = "";
   for(let ii = -10; ii<15;ii++){
     let i = ii + unixToday;
     var unixDay = unixToday + ii;
@@ -112,7 +137,7 @@ function drawSpdiary(horse_id){
     tr.appendChild(td1);
     tr.appendChild(td2);
     tr.appendChild(td3);
-    tblCalendar.appendChild(tr);
+    tblOutput.appendChild(tr);
   }
     
 }

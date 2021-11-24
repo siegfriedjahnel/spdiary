@@ -14,14 +14,14 @@
 <body>
   <div id="head">
     <button id="btn" onClick = "createNewHorse()">neues Pferd</button>
-    <button id="btn">Pferd teilen</button>
-    <button id="btn">Pferd nutzen</button>
+    <button id="btn" onClick = "drawHorses()">Pferde anzeigen</button>
+    <button id="btn" onClick = "useHorse()">Pferd nutzen</button>
   </div>
   <div id="navigation"></div>
 
   <div id="content">
     <h3 id = selectedHorse></h3>
-    <table id = "calendar">
+    <table id = "tblOutput">
       
     </table>
   </div>
