@@ -13,17 +13,31 @@
 </head>
 <body>
   <div id="head">
-    <button id="btn" onClick = "createNewHorse()">neues Pferd</button>
-    <button id="btn" onClick = "drawHorses()">Pferde anzeigen</button>
-    <button id="btn" onClick = "useHorse()">Pferd nutzen</button>
+    <div class="card1">
+      <div class="card1lr">
+        <h3>Besitzer</h3>
+        <button class="btnCard1" onClick = "createNewHorse()">Pferd eintragen</button>
+        <button class="btnCard1" onClick = "drawHorses()">Pferde anzeigen</button>
+        
+      </div>
+      <div class="card1lr">
+        
+        <h3>Beteiligung</h3>
+        <button class="btnCard1" onClick = "useHorse()">Beteilungung eintragen</button>
+        <button class="btnCard1" onClick = "useHorse()">Beteilungungen anzeigen</button>
+
+      </div>
+    </div>
   </div>
-  <div id="navigation"></div>
+  <div id="navigation" class="card1">
+  </div>
 
   <div id="content">
-    <h3 id = selectedHorse></h3>
-    <table id = "tblOutput">
-      
-    </table>
+    <div class = "card1" id = selectedHorse></div class = "card1">
+      <div class="card1">
+        <table id = "tblOutput"></table>
+      </div>
+
   </div>
   <div id = "footer"></div>
 </body>

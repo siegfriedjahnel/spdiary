@@ -147,7 +147,7 @@ function drawSpdiary(horse_id){
 //------------selects a horse to display---------------------------
 function selectHorseId(horseId){
   selectedHorseId = horseId;
-  selectedHorse.innerHTML = myHorses.filter(entry => entry.id == horseId)[0].name;
+  selectedHorse.innerHTML = "Kalender von " + myHorses.filter(entry => entry.id == horseId)[0].name;
   drawSpdiary(selectedHorseId);
 }
 //---------------------------------------------------------------

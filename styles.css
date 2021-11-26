@@ -5,6 +5,41 @@ body {
   margin: 0px;
   font-size: 1rem;
 }
+.card1{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px;
+  border-style: solid;
+  border-radius: .5em;
+
+  border-color: bisque;
+  background-color: coral;
+  padding: .5em;
+}
+.card1lr{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px;
+  border-style: solid;
+  border-radius: .5em;
+
+  border-color: bisque;
+  background-color: coral;
+  padding: .5em;
+}
+button{
+  margin: .3em;
+  padding: .3em;
+  border: 1px;
+  border-style: solid;
+  border-radius: .5em;
+
+  border-color: bisque;
+}
 
 table{
 width: 100%;
