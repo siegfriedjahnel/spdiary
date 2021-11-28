@@ -30,17 +30,32 @@ async function getSpdiary(){
 //---------------------------------------------------------------
 
 //--------stores a horse in local storage-----------------------
-async function saveHorseLocally(){
-  let id =13;
-  let name = "Sammy";
-  
-  
+function saveHorseLocally(id,name){
   let newHorse = new Object;
   newHorse.id=id;
   newHorse.name = name;
   myHorses.push(newHorse);
   localStorage.setItem("myHorses", JSON.stringify(myHorses));
+}
+//-------------------------------------------------------------------
 
+//--------updates a horse in local storage-----------------------
+function updateHorseLocally(id,name){
+  //find horse from myHorses --> row_id
+  let index = myHorses.findIndex(entry => entry.id == id);
+  if(name != "") myHorses[index].name = name;
+  localStorage.setItem("myHorses", JSON.stringify(myHorses));
+}
+//-------------------------------------------------------------------
+
+
+//--------updates a horse in local storage-----------------------
+function deleteHorseLocally(id){
+  if(confirm("Pferd wirklich löschen?")){
+    let index = myHorses.findIndex(entry => entry.id == id);
+    myHorses.splice(index,1);
+    localStorage.setItem("myHorses", JSON.stringify(myHorses));
+  }
 }
 //-------------------------------------------------------------------
 
@@ -52,14 +67,9 @@ async function createNewHorse(){
   console.log("response", response);
   if(response.statusText == "OK"){
     let id = await response.text();
-    let newHorse = new Object;
-    newHorse.id=id;
-    newHorse.name = name;
-    myHorses.push(newHorse);
-    localStorage.setItem("myHorses", JSON.stringify(myHorses));
+    saveHorseLocally(id,name);
     init();
   }
-
 }
 
 
@@ -69,6 +79,18 @@ async function updateSpdiary(id){
   let uri = `${apiUriSpdiary}?action=update&id=${id}&text=${text}`;
   const response = await fetch(uri);
   if(response.statusText == "OK"){
+    init();
+  }
+}
+
+async function updateHorse(id){
+  let oldname = myHorses.filter(entry => entry.id == id)[0].name;
+  let name = prompt("text",oldname);
+  let uri = `${apiUriHorse}?action=update&id=${id}&name=${name}`;
+  const response = await fetch(uri);
+  if(response.statusText == "OK"){
+    updateHorseLocally(id,name);
+    console.log("horsename updated on server",id,name);
     init();
   }
 }
@@ -95,10 +117,10 @@ function drawHorses(){
   const td2 = document.createElement("td");
   const td3 = document.createElement("td");
   td1.setAttribute("class","td1");
-  td3.setAttribute("class","td3");
+  td3.setAttribute("class","td25percent");
     td1.innerHTML = element.id;
     td2.innerHTML = element.name;
-    td3.innerHTML = `<button onClick = "updateHorse(${element.id})">&#x1F589;</button>`;
+    td3.innerHTML = `<button onClick = "updateHorse(${element.id})">&#x1F589;</button> <button onClick = "deleteHorseLocally(${element.id})">&#x26D2;</button>`;
     tr.appendChild(td1);
     tr.appendChild(td2);
     tr.appendChild(td3);
@@ -121,7 +143,7 @@ function drawSpdiary(horse_id){
     const td3 = document.createElement("td");
     const date = new Date(unixDay*f);
     td1.setAttribute("class","td1");
-    td3.setAttribute("class","td3");
+    td3.setAttribute("class","td10%");
     td1.innerHTML = date.toLocaleDateString('de-DE', options);
     let rows = allEntries.filter(entry => entry.day == i && entry.horse_id == horse_id);
     if(rows.length >0){

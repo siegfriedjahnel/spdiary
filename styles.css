@@ -45,6 +45,7 @@ table{
 width: 100%;
 }
 tr{
+  width: 100%;
   margin: 1px;
   border: 1px;
   border-style: solid;
@@ -62,6 +63,9 @@ td{
   width: 30%;
 }
 
-.td3{
+.td25percent{
+  width: 25%;
+}
+.td10percent{
   width: 10%;
 }
