@@ -20,11 +20,19 @@ let myHorses = [];
 //let myHorseId = ;
 let selectedHorseId = 0;
 
-//----------- fetches all entries in table: "spdiary" ----------
+//----------- fetches all entries from table: "spdiary" ----------
 async function getSpdiary(){
   const response = await fetch(apiUriSpdiary);
   const data = await response.json();
   allEntries = data;
+  return data;
+}
+//---------------------------------------------------------------
+
+//----------- fetches all entries from table: "spdiary" ----------
+async function getHorseById(id){
+  const response = await fetch(`${apiUriHorse}?action=get&id=${id}`);
+  const data = await response.json();
   return data;
 }
 //---------------------------------------------------------------
@@ -49,7 +57,7 @@ function updateHorseLocally(id,name){
 //-------------------------------------------------------------------
 
 
-//--------updates a horse in local storage-----------------------
+//--------deletes a horse from local storage-----------------------
 function deleteHorseLocally(id){
   if(confirm("Pferd wirklich löschen?")){
     let index = myHorses.findIndex(entry => entry.id == id);
@@ -59,17 +67,43 @@ function deleteHorseLocally(id){
 }
 //-------------------------------------------------------------------
 
-
-async function createNewHorse(){
+function createNewHorse(){
   let name = prompt("Name");
+  if(name != ""){
+    //save Horse on server
+    saveHorseOnServer(name)
+    .then(
+      (response) =>{
+        let id = response;
+        saveHorseLocally(id,name);
+      })
+  }
+}
+
+
+//------------------------------------------------------------
+function addSharedHorse(){
+  let horseId = prompt("Pferdenummer");
+  if(horseId != ""){
+    getHorseById(horseId)
+    .then(
+      response =>{
+        if(response.length >0){
+          let horseName = response[0].name;
+          saveHorseLocally(horseId, horseName);
+        }else{
+          alert("Pferd existiert nicht");
+        }
+      })
+  }
+}
+//-----------------------------------------------------------
+
+
+async function saveHorseOnServer(name){
   let uri = `${apiUriHorse}?action=insert&name=${name}`;
   const response = await fetch(uri);
-  console.log("response", response);
-  if(response.statusText == "OK"){
-    let id = await response.text();
-    saveHorseLocally(id,name);
-    init();
-  }
+  return  await response.text();
 }
 
 
@@ -143,7 +177,7 @@ function drawSpdiary(horse_id){
     const td3 = document.createElement("td");
     const date = new Date(unixDay*f);
     td1.setAttribute("class","td1");
-    td3.setAttribute("class","td10%");
+    td3.setAttribute("class","td10percent");
     td1.innerHTML = date.toLocaleDateString('de-DE', options);
     let rows = allEntries.filter(entry => entry.day == i && entry.horse_id == horse_id);
     if(rows.length >0){

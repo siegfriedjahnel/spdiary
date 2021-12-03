@@ -45,7 +45,7 @@ table{
 width: 100%;
 }
 tr{
-  width: 100%;
+ 
   margin: 1px;
   border: 1px;
   border-style: solid;
@@ -68,4 +68,5 @@ td{
 }
 .td10percent{
   width: 10%;
+  text-align: right;
 }
